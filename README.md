@@ -10,3 +10,8 @@ pkg install proot-distro -y
 pkg install wget -y
 pkg install git -y
 proot-distro install debian
+
+
+proot-distro login debian
+apt update -y 
+apt install xfce4
