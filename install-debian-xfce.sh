@@ -1,9 +1,9 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# Termux Debian + XFCE4 Auto Setup Script (English, no Siril)
+# Termux Debian + XFCE4 Auto Setup Script
 
 set -e
 
-echo "[*] Updating Termux packages..."
+echo "[*] Updating and upgrading Termux packages..."
 pkg update -y && pkg upgrade -y
 
 echo "[*] Installing required Termux packages..."
@@ -12,7 +12,7 @@ pkg install -y x11-repo termux-x11-nightly tur-repo pulseaudio proot-distro wget
 echo "[*] Setting up storage access..."
 termux-setup-storage
 
-echo "[*] Installing Debian..."
+echo "[*] Installing Debian via proot-distro..."
 proot-distro install debian
 
 echo "[*] Installing XFCE4 desktop inside Debian..."
@@ -26,8 +26,13 @@ cat > $PREFIX/bin/start-debian-xfce << 'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
 # Debian XFCE Starter
 
+# Start PulseAudio for sound
 pulseaudio --start --exit-idle-time=-1
+
+# Set DISPLAY variable for X11
 export DISPLAY=:0
+
+# Enter Debian and start XFCE4
 proot-distro login debian -- bash -c "dbus-launch startxfce4"
 EOF
 
