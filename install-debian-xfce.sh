@@ -1,30 +1,30 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# Termux Debian + XFCE4 + Siril Auto Setup Script
+# Termux Debian + XFCE4 Auto Setup Script (English, no Siril)
 
 set -e
 
-echo "[*] Termux paketleri güncelleniyor..."
+echo "[*] Updating Termux packages..."
 pkg update -y && pkg upgrade -y
 
-echo "[*] Gerekli paketler yükleniyor..."
+echo "[*] Installing required Termux packages..."
 pkg install -y x11-repo termux-x11-nightly tur-repo pulseaudio proot-distro wget git
 
-echo "[*] Storage erişimi ayarlanıyor..."
+echo "[*] Setting up storage access..."
 termux-setup-storage
 
-echo "[*] Debian kuruluyor..."
+echo "[*] Installing Debian..."
 proot-distro install debian
 
-echo "[*] Debian içine XFCE4 ve Siril kuruluyor..."
+echo "[*] Installing XFCE4 desktop inside Debian..."
 proot-distro login debian -- bash -c "
   apt update -y &&
-  DEBIAN_FRONTEND=noninteractive apt install -y xfce4 xfce4-goodies x11-apps dbus-x11 siril
+  DEBIAN_FRONTEND=noninteractive apt install -y xfce4 xfce4-goodies x11-apps dbus-x11
 "
 
-echo "[*] Başlatma scripti ekleniyor..."
+echo "[*] Creating start script..."
 cat > $PREFIX/bin/start-debian-xfce << 'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
-# Debian XFCE + Siril Starter
+# Debian XFCE Starter
 
 pulseaudio --start --exit-idle-time=-1
 export DISPLAY=:0
@@ -34,9 +34,9 @@ EOF
 chmod +x $PREFIX/bin/start-debian-xfce
 
 echo
-echo "[✓] Kurulum tamamlandı!"
-echo "Kullanım:"
-echo "1. Termux-X11 uygulamasını aç"
-echo "2. Termux’ta şu komutu çalıştır:"
+echo "[✓] Installation finished!"
+echo "Usage:"
+echo "1. Open Termux-X11 app"
+echo "2. In Termux, run:"
 echo
 echo "   start-debian-xfce"
